@@ -38,8 +38,8 @@ const THEME = {
 };
 
 const BRAND = {
-  name: "NØTHING",
-  tagline: "You can't get something for nothing. But you can get nothing for something.",
+  name: "THE NØTHING",
+  tagline: "You can't get something for nothing. But you can get NØTHING for something.",
 };
 
 // Stripe (replace with real Payment Links)
