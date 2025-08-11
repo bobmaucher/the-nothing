@@ -233,18 +233,35 @@ function Layout({ children }){
 }
 
 function Home(){
+  const reduce = useReducedMotion();
   return (
     <>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-white/10 text-slate-100">
-        <div className="max-w-7xl mx-auto px-4 py-28">
-          <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9]">
-            Give <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent1})` }}>Nothing</span>.
+        <div className="max-w-7xl mx-auto px-4 py-36 md:py-44">
+          {/* soft spotlight behind heading */}
+          <div aria-hidden className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 h-[20rem] w-[40rem] blur-3xl opacity-30" style={{ background: `radial-gradient( ellipse at center, ${THEME.accent1}22, ${THEME.accent2}11 40%, transparent 70%)` }} />
+
+          {/* kicker badge */}
+          <span className="inline-block text-[10px] uppercase tracking-widest px-3 py-1 rounded-full" style={{ background: THEME.accent1, color: '#0b0d10' }}>Luxury Novelty</span>
+
+          <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mt-4 text-7xl md:text-9xl lg:text-[10rem] font-black tracking-[-0.02em] leading-[0.8]">
+            Give {reduce ? (
+              <span className="bg-clip-text text-transparent drop-shadow-[0_10px_40px_rgba(90,200,228,0.25)]" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent2}, ${THEME.accent3})` }}>Nothing</span>
+            ) : (
+              <motion.span
+                className="bg-clip-text text-transparent drop-shadow-[0_10px_40px_rgba(90,200,228,0.25)]"
+                style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent2}, ${THEME.accent3})`, backgroundSize: '200% 100%' }}
+                initial={{ backgroundPositionX: '0%' }}
+                animate={{ backgroundPositionX: '100%' }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+              >Nothing</motion.span>
+            )}.
           </motion.h1>
-          <p className="mt-6 text-lg text-slate-300 max-w-2xl">{BRAND.tagline}</p>
+          <p className="mt-6 text-xl md:text-2xl text-slate-200 max-w-2xl">{BRAND.tagline}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <NeonButton onClick={payOnce}><span className="inline-flex items-center gap-2"><CreditCard className="w-4 h-4"/> Buy Nothing (one‑time)</span></NeonButton>
-            <NeonButton variant="ghost" onClick={subscribe}>Subscribe to Nothing (monthly)</NeonButton>
+            <NeonButton onClick={payOnce} className="group px-7 py-4 text-base"><span className="inline-flex items-center gap-2"><CreditCard className="w-4 h-4 transition-transform group-hover:translate-x-1"/> Buy Nothing (one‑time)</span></NeonButton>
+            <NeonButton variant="ghost" onClick={subscribe} className="px-7 py-4 text-base">Subscribe to Nothing (monthly)</NeonButton>
           </div>
           <div className="mt-5 text-xs text-slate-400 flex items-center gap-2"><ShieldCheck className="w-4 h-4"/> Secure checkout by Stripe • You will receive… nothing.</div>
           <AppChecks />

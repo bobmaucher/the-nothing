@@ -8,7 +8,7 @@ TheNothing.site is a humor-driven, **luxury-feel**, satirical web experience.
 > 💡 **Core Idea:** Present “products” and “services” that promise exactly *nothing*, wrapped in over-the-top marketing language and high-end design.  
 
 - 🎭 **Theme**: Playful mockery of over-marketed industries.  
-- 🎨 **Aesthetic**: `#5AC8E4` Futuristic luxe — dark backgrounds, vibrant gradient accents, glowing elements, subtle animations.  
+- 🎨 **Aesthetic**: `#5AC8E4` Futuristic luxe — dark backgrounds, vibrant gradient accents, glowing elements, subtle animations. (Circle-with-slash logomark used in UI & icons.)  
 - 😏 **Tone**: Convincingly professional at first glance, absurd and comedic upon reading the copy.  
 - 💳 **Monetization**: Stripe-powered checkout for joke “purchases,” possible merch tie-ins.  
 
@@ -17,22 +17,26 @@ TheNothing.site is a humor-driven, **luxury-feel**, satirical web experience.
 ## 🚀 **2. Current State**
 ### 🎨 **Design & Styling**
 - 🖤 Dark, futuristic theme with gradient accents and glowing elements.  
-- ✨ Animated shimmer effects on primary buttons (**`NeonButton`**).  
+- ✨ Animated shimmer effects on primary buttons (**`NeonButton`**), respectful of `prefers-reduced-motion`.  
 - 🎯 Card tilt interactions for a premium, interactive feel.  
-- 🖌 Hover animations updated to avoid GPU text blur.  
-- 🎨 Consistent Tailwind color handling (`bg-white/5`, `hover:bg-white/5`).  
+- 🖌 Hover animations tuned to avoid GPU text blur.  
+- 🎨 Consistent Tailwind color handling; brand cyan unified to **#5AC8E4**.  
 
 ### ⚙ **Core Functionality**
-- 💳 **Stripe Checkout** integrated for “purchase” flow.  
-- 📱 Fully responsive layout (desktop & mobile).  
-- 🌌 Animated background elements for depth & intrigue.  
-- 🔁 Reusable `NeonButton` and `CardTilt` components.  
+- 🌐 **Live site** deployed on **Vercel** at `https://thenothing.site` (GitHub → Vercel CI).  
+- 🧭 **Routing**: React Router SPA + direct static pages (`/404.html`, `/500.html`). In-app **NotFound** route for unknown paths; **ErrorBoundary** for client errors.  
+- 🧩 Reusable `NeonButton`, `CardTilt`, `GlowLayer` components.  
+- 🖼 **Brand assets**: Favicon (SVG/PNG/ICO), Apple/Android icons, `og.png`.  
+- 📄 **SEO base**: title/description/OG in `<head>`; indexing **allowed**.  
+- 💳 **Stripe Checkout** wired via placeholder Payment Links (ready to swap to real).  
+- 🗺 **Sitemap/robots** present.  
 
 ### 🛠 **Technical Stack**
 - ⚛ **Frontend**: React + Vite  
 - 🎨 **Styling**: TailwindCSS with custom gradients, dark theme  
 - 🎬 **Animations**: Framer Motion  
 - 💳 **Payments**: Stripe Checkout integration  
+- ☁️ **Hosting**: Vercel (filesystem-first routes; SPA rewrite; immutable asset caching)
 
 ---
 
@@ -58,11 +62,11 @@ TheNothing.site is a humor-driven, **luxury-feel**, satirical web experience.
 
 ## 🛠 **4. Next Steps**
 1. ✍ **Content Writing** – Draft first 3 product/service pages.  
-2. 🗺 **Page Routing** – Add React Router for product pages.  
-3. 🧩 **Component Library** – Create reusable layouts for showcases.  
-4. 📈 **SEO Setup** – Add meta tags, share previews, keywords.  
-5. 🌍 **Deployment Prep** – Deploy to Vercel/Netlify & connect `thenothing.site` DNS via Squarespace.  
-6. ✅ **QA Testing** – Test responsiveness, animations, and Stripe checkout across browsers.  
+2. 🗺 **Page Routing** – Add routes for product pages (catalog already present; extend with `/p/:slug` content & SEO).  
+3. 🧩 **Component Library** – Create reusable product layout/“spec sheet” section.  
+4. 📈 **SEO Setup** – Add per-route `<title>/<meta>` + OG tags; social images per product.  
+5. 🌍 **Deployment Prep** – Confirm Vercel primary domain & `www`→apex redirect; keep current `vercel.json`.  
+6. ✅ **QA Testing** – Cross-browser pass (desktop/mobile); verify ErrorBoundary & 404s; Stripe link hand-off.  
 
 ---
 
@@ -73,32 +77,36 @@ TheNothing.site is a humor-driven, **luxury-feel**, satirical web experience.
 
 ---
 
-**📌 Status:** 🚀 *Design and core functionality complete. Content creation & deployment next.*
+**📌 Status:** ✅ *Site live on Vercel with brand polish, routing, static error pages, and caching. Content expansion + SEO per route next.*
 
 ---
 
 ## 🧰 6. Technical Architecture & Stack (Detailed)
-- **Runtime**: Node.js ≥ 18 (recommended 20 LTS)
-- **Build Tool**: Vite `^7.1.0`
-- **Framework**: React `^19.1.1`
-- **Router**: React Router DOM `^7.8.0` (using `BrowserRouter`, `Routes`, `Route`, `Link`, `useParams`, `useNavigate`)
-- **Styling**: Tailwind CSS `^4.1.11`
-  - PostCSS plugin: `@tailwindcss/postcss` `^4.1.11`
+- **Runtime**: Node.js ≥ 18 (20 LTS recommended)
+- **Build Tool**: Vite
+- **Framework**: React
+- **Router**: React Router DOM (`BrowserRouter`, `Routes`, `Route`, `Link`, `useParams`, `useNavigate`)
+- **Styling**: Tailwind CSS  
+  - PostCSS plugin: `@tailwindcss/postcss`  
   - Global entry: `src/index.css` with `@import "tailwindcss"`
-- **Animations**: Framer Motion `^12.23.12` (card tilt, background glows, button gleam)
-- **Icons**: `lucide-react` `^0.539.0`
-- **PDF Generation**: `jspdf` `^3.0.1` (Certificate of Nothing)
-- **Linting**: ESLint `^9.32.0` with `@eslint/js`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`
+- **Animations**: Framer Motion (card tilt, background glows, button gleam; honors `prefers-reduced-motion`)
+- **Icons**: `lucide-react`
+- **PDF Generation**: `jspdf` (Certificate of Nothing)
+- **Linting**: ESLint with `@eslint/js`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`
 - **Dev Server**: Vite (HMR)
+- **Hosting**: **Vercel** with `vercel.json`:
+  - Filesystem-first routes, SPA rewrite to `/index.html`
+  - Asset caching: `/assets/*` → `Cache-Control: public, max-age=31536000, immutable`
 
 Key files:
-- `src/App.jsx` — UI, routes, pages, components (`NeonButton`, `CardTilt`, `GlowLayer`)
+- `src/App.jsx` — UI, routes, pages, components (`NeonButton`, `CardTilt`, `GlowLayer`, `NotFound`, `ErrorBoundary`)
 - `src/main.jsx` — React bootstrap
 - `src/index.css` — Tailwind entry
 - `tailwind.config.js` — content globs, theme extend placeholder
 - `postcss.config.js` — Tailwind plugin registration
 - `vite.config.js` — React plugin
 - `eslint.config.js` — ESLint configuration
+- `vercel.json` — routes/headers (see above)
 
 ---
 
@@ -111,10 +119,10 @@ Key files:
 Vite optimizations (out-of-the-box):
 - ESBuild for TS/JS transforms; Rollup for production bundles
 - Asset hashing and code-splitting by route
-- PostCSS pipeline for Tailwind (via `@tailwindcss/postcss`)
+- PostCSS pipeline for Tailwind
 
 Tailwind v4 specifics:
-- Uses the new v4 engine, no manual `@tailwind base/components/utilities` — `@import "tailwindcss"` is sufficient
+- Uses v4 engine; `@import "tailwindcss"` in `src/index.css`
 - Content discovery via `tailwind.config.js` `content: ["./index.html","./src/**/*.{js,jsx}"]`
 
 ---
@@ -123,20 +131,31 @@ Tailwind v4 specifics:
 ```
 thenothing-site/
   ├─ admin/
-  │  ├─ roadmap.md
-  │  └─ list_of_nothing.md
+  │ ├─ roadmap.md
+  │ └─ list_of_nothing.md
   ├─ public/
-  │  └─ vite.svg
+  │ ├─ favicon.svg
+  │ ├─ favicon.png
+  │ ├─ favicon.ico
+  │ ├─ apple-touch-icon.png
+  │ ├─ android-chrome-192x192.png
+  │ ├─ android-chrome-512x512.png
+  │ ├─ og.png
+  │ ├─ robots.txt
+  │ ├─ sitemap.xml
+  │ ├─ 404.html
+  │ └─ 500.html
   ├─ src/
-  │  ├─ App.jsx
-  │  ├─ main.jsx
-  │  ├─ index.css
-  │  └─ assets/
+  │ ├─ App.jsx
+  │ ├─ main.jsx
+  │ ├─ index.css
+  │ └─ assets/
   ├─ index.html
   ├─ eslint.config.js
   ├─ postcss.config.js
   ├─ tailwind.config.js
   ├─ vite.config.js
+  ├─ vercel.json
   └─ package.json
 ```
 
