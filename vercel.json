@@ -1,9 +1,6 @@
 {
   "version": 2,
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/index.html" }
-  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
     {
       "source": "/(.*)\\.(?:js|css|png|svg|ico|jpg|jpeg|gif|webp|avif|woff|woff2|ttf|eot)",
