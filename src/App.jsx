@@ -4,6 +4,28 @@ import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-m
 import { CreditCard, ShieldCheck, Infinity, Gift, Sparkles, Star, ArrowRight } from "lucide-react";
 import { jsPDF } from "jspdf";
 
+
+function Boom(){ throw new Error("kaboom"); }
+
+
+class ErrorBoundary extends React.Component {
+  constructor(props){ super(props); this.state = { hasError: false }; }
+  static getDerivedStateFromError(){ return { hasError: true }; }
+  componentDidCatch(err, info){ console.error(err, info); }
+  render(){ return this.state.hasError ? <ErrorView/> : this.props.children; }
+}
+
+function ErrorView(){
+  return (
+    <section className="max-w-7xl mx-auto px-4 py-24 text-center text-slate-100">
+      <h1 className="text-3xl font-bold">500 — Nothing went wrong*</h1>
+      <p className="mt-2 text-slate-300">*Something did, but we’ll show you nothing.</p>
+      <a href="/" className="mt-6 inline-block underline">Return to Home</a>
+    </section>
+  );
+}
+
+
 // ─────────────────────────────────────────────────────────────
 // FUTURISTIC MINIMAL GLOW THEME
 // Palette: near‑black base, neon pastel accents used sparingly
@@ -463,18 +485,34 @@ function CertificateLanding(){
   );
 }
 
+function NotFound() {
+  return (
+    <section className="max-w-7xl mx-auto px-4 py-24 text-center text-slate-100">
+      <h1 className="text-3xl font-bold">404 — Nothing here.</h1>
+      <p className="mt-2 text-slate-300">The page you’re looking for is… nothing.</p>
+      <NeonButton onClick={() => (window.location.href = "/")} className="mt-6">
+        Return to Home
+      </NeonButton>
+    </section>
+  );
+}
+
+
 export default function App(){
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/catalog" element={<Catalog/>} />
-          <Route path="/p/:slug" element={<ProductPage/>} />
-          <Route path="/certificate" element={<CertificateLanding/>} />
-          <Route path="*" element={<Home/>} />
-        </Routes>
-      </Layout>
+      <ErrorBoundary>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/catalog" element={<Catalog/>} />
+            <Route path="/p/:slug" element={<ProductPage/>} />
+            <Route path="/certificate" element={<CertificateLanding/>} />
+            <Route path="/boom" element={<Boom/>} /> {/* REMOVE THIS AFTER TESTING */}
+            <Route path="*" element={<NotFound/>} />
+          </Routes>
+        </Layout>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
