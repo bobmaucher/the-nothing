@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
 import { CreditCard, ShieldCheck, Infinity, Gift, Sparkles, Star, ArrowRight } from "lucide-react";
