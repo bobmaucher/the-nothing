@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
 import { CreditCard, ShieldCheck, Infinity, Gift, Sparkles, Star, ArrowRight } from "lucide-react";
 import { jsPDF } from "jspdf";
 
 // ─────────────────────────────────────────────────────────────
-// FUTURISTIC MINIMAL GLOW THEME (ultra‑expensive, no gold)
+// FUTURISTIC MINIMAL GLOW THEME
 // Palette: near‑black base, neon pastel accents used sparingly
 const THEME = {
   bg: "bg-gradient-to-br from-[#0b0d10] via-[#0b1120] to-[#0b0d10]",
   card: "bg-white/3 backdrop-blur-xl border border-white/10",
-  accent1: "#8de7ff", // cyan
+  accent1: "#5AC8E4", // cyan
   accent2: "#c9a7ff", // violet
   accent3: "#ffa7d7", // magenta‑rose
 };
@@ -45,8 +45,10 @@ function genArticle(name, tld){
 
 // ─────────────────────────────────────────────────────────────
 // Micro‑components
-function NeonButton({ children, onClick, variant="primary", className="" }){
+function NeonButton({ children, onClick, variant = "primary", className = "" }) {
   const isPrimary = variant === "primary";
+  const reduce = useReducedMotion();
+
   return (
     <button
       type="button"
@@ -55,26 +57,47 @@ function NeonButton({ children, onClick, variant="primary", className="" }){
       style={isPrimary ? { background: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent2})` } : undefined}
     >
       <span className="relative z-10 antialiased" style={{ transform: "translateZ(0)" }}>{children}</span>
-      {/* moving gleam */}
-      <motion.span
-        initial={{ x: -260 }}
-        animate={{ x: 260 }}
-        transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
-        className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12"
-      />
+      {/* moving gleam (disabled if prefers-reduced-motion) */}
+      {!reduce && (
+        <motion.span
+          initial={{ x: -260 }}
+          animate={{ x: 260 }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
+          className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12"
+        />
+      )}
     </button>
   );
 }
 
-function GlowLayer(){
+function GlowLayer() {
+  const reduce = useReducedMotion();
+  const common = "pointer-events-none fixed blur-3xl";
+  const style1 = { background: `radial-gradient(circle at 30% 40%, ${THEME.accent1}22, transparent 60%)` };
+  const style2 = { background: `radial-gradient(circle at 60% 50%, ${THEME.accent2}22, transparent 60%)` };
+  const style3 = { background: `radial-gradient(circle at 50% 60%, ${THEME.accent3}22, transparent 60%)` };
+
+  if (reduce) {
+    // Static, subtler glows (better perf and accessibility)
+    return (
+      <>
+        <div aria-hidden className={`${common} -top-20 -left-24 h-[28rem] w-[28rem] opacity-30`} style={style1} />
+        <div aria-hidden className={`${common} top-1/3 -right-24 h-[30rem] w-[30rem] opacity-25`} style={style2} />
+        <div aria-hidden className={`${common} bottom-0 left-1/4 h-[24rem] w-[24rem] opacity-20`} style={style3} />
+      </>
+    );
+  }
+
+  // Animated for everyone else
   return (
     <>
-      <motion.div aria-hidden initial={{ opacity: 0.25 }} animate={{ opacity: [0.15,0.35,0.15] }} transition={{ duration: 8, repeat: Infinity }} className="pointer-events-none fixed -top-20 -left-24 h-[32rem] w-[32rem] blur-3xl" style={{ background: `radial-gradient( circle at 30% 40%, ${THEME.accent1}22, transparent 60%)` }} />
-      <motion.div aria-hidden initial={{ opacity: 0.25 }} animate={{ opacity: [0.15,0.35,0.15] }} transition={{ duration: 10, repeat: Infinity }} className="pointer-events-none fixed top-1/3 -right-24 h-[36rem] w-[36rem] blur-3xl" style={{ background: `radial-gradient( circle at 60% 50%, ${THEME.accent2}22, transparent 60%)` }} />
-      <motion.div aria-hidden initial={{ opacity: 0.25 }} animate={{ opacity: [0.15,0.35,0.15] }} transition={{ duration: 12, repeat: Infinity }} className="pointer-events-none fixed bottom-0 left-1/4 h-[28rem] w-[28rem] blur-3xl" style={{ background: `radial-gradient( circle at 50% 60%, ${THEME.accent3}22, transparent 60%)` }} />
+      <motion.div aria-hidden initial={{ opacity: 0.25 }} animate={{ opacity: [0.15, 0.35, 0.15] }} transition={{ duration: 8, repeat: Infinity }} className={`${common} -top-20 -left-24 h-[32rem] w-[32rem]`} style={style1} />
+      <motion.div aria-hidden initial={{ opacity: 0.25 }} animate={{ opacity: [0.15, 0.35, 0.15] }} transition={{ duration: 10, repeat: Infinity }} className={`${common} top-1/3 -right-24 h-[36rem] w-[36rem]`} style={style2} />
+      <motion.div aria-hidden initial={{ opacity: 0.25 }} animate={{ opacity: [0.15, 0.35, 0.15] }} transition={{ duration: 12, repeat: Infinity }} className={`${common} bottom-0 left-1/4 h-[28rem] w-[28rem]`} style={style3} />
     </>
   );
 }
+
 
 function CardTilt({ children, className="" }){
   const x = useMotionValue(0); const y = useMotionValue(0);
@@ -133,6 +156,18 @@ function AppChecks(){
 }
 
 // ─────────────────────────────────────────────────────────────
+// Logo Mark - tiny SVG; circle with a slash
+function LogoMark({ size = 32 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
+      <circle cx="32" cy="32" r="23" fill="none" stroke={THEME.accent1} strokeWidth="6" />
+      <line x1="16" y1="16" x2="48" y2="48" stroke={THEME.accent1} strokeWidth="6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+
+// ─────────────────────────────────────────────────────────────
 function Layout({ children }){
   return (
     <div className={`min-h-screen relative ${THEME.bg}`}>
@@ -140,7 +175,9 @@ function Layout({ children }){
       <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-[#0b0d10]/70 border-b border-white/10 text-slate-100">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-xl" style={{ background: `linear-gradient(135deg, ${THEME.accent1}, ${THEME.accent2})` }} />
+            <div className="h-8 w-8 grid place-items-center rounded-xl bg-white/5 border border-white/10">
+              <LogoMark size={20} />
+            </div>
             <span className="font-semibold tracking-tight">{BRAND.name}</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
@@ -180,7 +217,7 @@ function Home(){
       <section className="relative overflow-hidden border-b border-white/10 text-slate-100">
         <div className="max-w-7xl mx-auto px-4 py-28">
           <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9]">
-            Give <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent2})` }}>Nothing</span>.
+          Give <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent1})` }}>Nothing</span>.
           </motion.h1>
           <p className="mt-6 text-lg text-slate-300 max-w-2xl">{BRAND.tagline}</p>
           <div className="mt-8 flex flex-wrap gap-3">
