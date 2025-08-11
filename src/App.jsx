@@ -217,7 +217,7 @@ function Home(){
       <section className="relative overflow-hidden border-b border-white/10 text-slate-100">
         <div className="max-w-7xl mx-auto px-4 py-28">
           <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-6xl md:text-8xl font-black tracking-tight leading-[0.9]">
-          Give <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent1})` }}>Nothing</span>.
+            Give <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent1})` }}>Nothing</span>.
           </motion.h1>
           <p className="mt-6 text-lg text-slate-300 max-w-2xl">{BRAND.tagline}</p>
           <div className="mt-8 flex flex-wrap gap-3">
