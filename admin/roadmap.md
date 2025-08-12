@@ -29,7 +29,7 @@ TheNothing.site is a humor-driven, **luxury-feel**, satirical web experience.
 - 🖼 **Brand assets**: Favicon (SVG/PNG/ICO), Apple/Android icons, `og.png`.  
 - 📄 **SEO base**: title/description/OG in `<head>`; indexing **allowed**.  
 - 💳 **Stripe Checkout** wired via placeholder Payment Links (ready to swap to real).  
-- 🗺 **Sitemap/robots** present.  
+- 🗺 **Sitemap/robots** present.
 
 ### 🛠 **Technical Stack**
 - ⚛ **Frontend**: React + Vite  
@@ -202,108 +202,124 @@ Recommended migration to Vite env vars:
    const STRIPE_ONE_TIME_LINK = import.meta.env.VITE_STRIPE_ONE_TIME_LINK
    const STRIPE_SUBSCRIPTION_LINK = import.meta.env.VITE_STRIPE_SUBSCRIPTION_LINK
    ```
-3. Ensure host (Vercel/Netlify) defines the same env vars.
+3. In Vercel → Project Settings → Environment Variables, add the same keys for Production (and Preview if desired).
 
-Note: Vite exposes only `VITE_*` prefixed variables to the client bundle.
+Notes:
+- Only variables prefixed with `VITE_` are exposed to the client bundle.
+- No secrets are stored; payments happen on Stripe Checkout.
 
 ---
 
 ## ☁️ 11. Deployment
-Target: Vercel or Netlify (both work well with Vite static builds).
+**Target:** Vercel (active) — GitHub → Vercel auto-deploys from `main`.
 
-Build settings:
+**Build settings**
 - Build command: `npm run build`
 - Output directory: `dist`
 
-Vercel:
+**Vercel**
 - Framework: Other → React + Vite
 - Set env vars in Vercel Project Settings
-- Optional: Configure `vercel.json` for headers/caching if needed
+- Filesystem-first prevents JS bundles from being rewritten to HTML.
+- SPA rewrite serves `index.html` for client routes.
+- `/404.html` and `/500.html` remain directly accessible.
 
-Netlify:
+**DNS**
+- Domain: Squarespace → Vercel (A apex to Vercel, CNAME www to Vercel).
+- Primary domain set; the other host redirects to primary.
+- Release flow
+- Commit to main → Vercel builds & deploys.
+- Rollback: promote any previous green deployment in Vercel.
+
+**Netlify:**
 - Build command: `npm run build`
 - Publish directory: `dist`
 - Set env vars in Site settings → Build & deploy → Environment
 
-DNS:
-- Point `thenothing.site` to your host provider (A/ALIAS or CNAME as required)
-
 ---
 
 ## ⚡ 12. Performance & Accessibility
-- Minimize large images; prefer SVG (current assets already lean)
-- Avoid excessive box-shadows on mobile to reduce paint cost
-- Use `motion` sparingly; reduce duration/opacity on low-power devices in the future
-- Ensure sufficient color contrast; current theme uses `text-slate-*` on dark backgrounds
-- Add semantic landmarks and ARIA where necessary; headings are already structured
+- **Caching:** Hashed assets are immutable (1 year); SPA serves HTML.
+- **Motion:** `NeonButton` and `GlowLayer` honor `prefers-reduced-motion`.
+- **Contrast & legibility:** Dark theme with `text-slate-*`; verify WCAG AA on key text.
+- **Images/icons:** Prefer SVG; current set is lightweight.
+- **Mobile perf:** Use large shadows sparingly on long lists.
+- **Lighthouse targets:** ≥95 for Performance, Best Practices, and SEO (mobile & desktop).
 
-Planned optimizations:
-- Preload core fonts if custom fonts are introduced
-- Route-level code splitting (already inherent with Vite + dynamic imports when used)
-- Static metadata tags for social sharing (OG/Twitter) per route
+**Planned**
+- Add `site.webmanifest` + `<meta name="theme-color" content="#5AC8E4">`.
+- Per-route OG images + metadata for product pages.
 
 ---
 
 ## 🧭 13. Testing & QA
-- Manual smoke tests across Chrome, Safari, Firefox, iOS, Android
-- Linting (`npm run lint`) is enforced locally; consider CI lint
-- Future: add Playwright for E2E of primary flows:
-  - Navigate routes
-  - Trigger Stripe links
-  - Generate PDF
+**Manual smoke tests**
+- Navigate: Home → Catalog → Product → fake route (404) → Back.
+- Stripe links open correctly (one-time + subscription).
+- Certificate PDF generates/downloads.
+- Responsive checks on iOS/Android, Chrome/Safari/Firefox.
+
+**Automate later**
+- CI lint/build (GitHub Actions).
+- Playwright E2E: routing, Stripe link open, PDF generation.
+- Lighthouse CI for performance budgets.
 
 ---
 
 ## 📊 14. Analytics & SEO
-- Add basic analytics (Plausible, Umami, or Google Analytics) via `index.html`
-- Add `<title>`, `<meta name="description">` per route; consider React Helmet or Vite plugin for HTML transforms
-- Social previews: add OG tags and route-specific images for product pages
+- **Analytics:** Deferred (choose GA4 or Plausible later).
+- **SEO base:** Global title/description/OG present; indexing allowed; `sitemap.xml` + `robots.txt` published.
+- **Next:** Per-route `<title>/<meta>` + OG/Twitter tags (React Helmet or Vite HTML plugin).
+- **Social:** Product-specific share images when pages are created.
 
 ---
 
 ## 🔒 15. Security & Privacy
-- No PII collected by default
-- Payments handled off-site by Stripe Checkout links
-- If forms are added, validate client-side and avoid storing data unless necessary
-- Keep dependencies updated; review `npm audit` periodically
+- No PII collected by default; Stripe Checkout handles payments off-site.
+- Basic hardening via Vercel (immutable assets, filesystem-first routing).
+- Add a tailored **Content-Security-Policy** after choosing analytics (whitelist only required origins).
+- Keep dependencies updated; run `npm audit` periodically.
 
 ---
 
 ## 🧾 16. Feature Notes (Current Implementations)
-- `NeonButton`: gradient primary with animated gleam using Framer Motion
-- `CardTilt`: cursor-based tilt using `useMotionValue` and `useTransform`
-- `GlowLayer`: animated background radial glows
-- `AppChecks`: lightweight runtime checks to surface config issues
-- `downloadCertificate`: generates PDF via `jsPDF` with styled frame and dynamic recipient/code
+- **NeonButton:** gradient primary with animated gleam; disables animation for reduced-motion users.
+- **CardTilt:** cursor-based tilt via `useMotionValue` + `useTransform`.
+- **GlowLayer:** animated radial glows with static fallback for reduced motion.
+- **AppChecks:** quick runtime checks for config basics.
+- **downloadCertificate:** novelty PDF via `jsPDF` (recipient name + code).
+- **NotFound:** in-app 404 route for unknown paths.
+- **ErrorBoundary:** friendly 500 screen for client-side crashes.
+- **Brand assets:** cyan circle–slash logo; favicons, Apple/Android icons, `og.png`.
 
 ---
 
 ## 🗺 17. Expanded Roadmap (Actionable)
-- **Phase 1: Content & Structure**
-  - Migrate Stripe links to env vars (see section 10)
-  - Add 6–10 additional product pages to `PRODUCTS` with unique bullets and long-form copy
-  - Add route-level meta tags (title/description)
-  - Add a global 404 page with on-brand copy
+**Phase 1: Content & Structure**
+- Migrate Stripe links to env vars (see section 10).
+- Add 6–10 product pages to `PRODUCTS` with unique bullets + long-form copy.
+- Per-route meta tags (title/description/OG) + share images.
+- (Optional) Edge middleware for true 404 status while preserving SPA UX.
 
-- **Phase 2: Design & Motion**
-  - Add animated gradient text utilities (Tailwind custom utilities or inline styles)
-  - Introduce page transition animations with Framer Motion `AnimatePresence`
-  - Parallax layers for hero (reduce motion for `prefers-reduced-motion`)
+**Phase 2: Design & Motion**
+- Animated gradient text utilities.
+- Page transitions with `AnimatePresence`.
+- Parallax hero (with reduced-motion fallback).
 
-- **Phase 3: Monetization & Engagement**
-  - Stripe: add Payment Links for real one-time and subscription products
-  - Lock certificate download behind a simple flag (query or localStorage) toggled post-checkout return URL
-  - Add email capture (if desired) with a privacy-first provider (Buttondown, ConvertKit)
+**Phase 3: Monetization & Engagement**
+- Real Stripe Payment Links; configure success/cancel URLs.
+- Gate certificate download post-checkout (flag or webhook).
+- Optional email capture with a privacy-first provider.
 
-- **Phase 4: Ops & Quality**
-  - CI: GitHub Actions for `install → lint → build`
-  - Automated E2E (Playwright) for top flows
-  - Lighthouse budget checks (CI) and fix regressions
+**Phase 4: Ops & Quality**
+- GitHub Actions: `install → lint → build`.
+- Playwright E2E for top flows.
+- Lighthouse budgets enforced in CI.
 
-- **Phase 5: Launch & Growth**
-  - Deploy to Vercel/Netlify with custom domain
-  - Add Plausible/Umami analytics
-  - Social sharing images per product; announce on socials
+**Phase 5: Launch & Growth**
+- Roll out product share images + social posts.
+- Add analytics of choice (GA4/Plausible).
+- Iterate on copy and product lineup.
 
 ---
 
@@ -333,3 +349,4 @@ npm run lint
 - Certificate generation works and downloads PDF
 - Mobile and desktop layouts pass basic responsiveness checks
 - Build is reproducible and deploys cleanly to chosen host
+- In-app 404 + ErrorBoundary present; static `/404.html` and `/500.html` accessible.
