@@ -55,6 +55,10 @@ const PRODUCTS = [
   { slug: "nothing-today", tld: "nothing.today", name: "Nothing Today", sub: "Daily delivery of nothing.", bullets: ["Arrives every day with nothing","Inbox‑friendly void","Missed it? You didn’t."] },
 ];
 
+// env vars you added in Vercel (and .env locally)
+const ONE = import.meta.env.VITE_STRIPE_ONE_TIME_LINK;
+const SUB = import.meta.env.VITE_STRIPE_SUBSCRIPTION_LINK;
+
 // Satirical long‑form copy
 function genArticle(name, tld){
   return [
@@ -263,8 +267,17 @@ function Home(){
               </motion.h1>
               <p className="mt-6 text-xl md:text-2xl text-slate-200 max-w-2xl">{BRAND.tagline}</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <NeonButton onClick={payOnce} className="group px-7 py-4 text-base"><span className="inline-flex items-center gap-2"><CreditCard className="w-4 h-4 transition-transform group-hover:translate-x-1"/> Buy Nothing (one‑time)</span></NeonButton>
-                <NeonButton variant="ghost" onClick={subscribe} className="px-7 py-4 text-base">Subscribe to Nothing (monthly)</NeonButton>
+                <a href={ONE}
+                  className="inline-block rounded-2xl px-5 py-3 font-semibold text-black transition hover:scale-[1.02]"
+                  style={{ background: "linear-gradient(90deg, #5AC8E4, #ED1C24)" }}>
+                  Single Serving of NØTHING — $3
+                </a>
+                <a href={SUB}
+                  className="inline-block rounded-2xl px-5 py-3 text-slate-100 border border-white/10 bg-white/5 transition hover:ring-1 hover:ring-white/20 hover:scale-[1.02]">
+                  Join The NØTHING Club — $3/mo
+                </a>
+                {/*<NeonButton onClick={payOnce} className="group px-7 py-4 text-base"><span className="inline-flex items-center gap-2"><CreditCard className="w-4 h-4 transition-transform group-hover:translate-x-1"/> Buy Nothing (one‑time)</span></NeonButton>*/}
+                {/*<NeonButton variant="ghost" onClick={subscribe} className="px-7 py-4 text-base">Subscribe to Nothing (monthly)</NeonButton>*/}
               </div>
               <div className="mt-5 text-xs text-slate-400 flex items-center gap-2"><ShieldCheck className="w-4 h-4"/> Secure checkout by Stripe • You will receive… nothing.</div>
               <AppChecks />
