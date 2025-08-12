@@ -238,7 +238,7 @@ function Home(){
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden border-b border-white/10 text-slate-100">
+      <section className="relative border-b border-white/10 text-slate-100">
         <div className="max-w-7xl mx-auto px-4 py-36 md:py-44">
           {/* soft spotlight behind heading */}
           <div aria-hidden className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-10 h-[20rem] w-[40rem] blur-3xl opacity-30" style={{ background: `radial-gradient( ellipse at center, ${THEME.accent1}22, ${THEME.accent2}11 40%, transparent 70%)` }} />
@@ -248,7 +248,7 @@ function Home(){
               {/* kicker badge */}
               <span className="inline-block text-[10px] uppercase tracking-widest px-3 py-1 rounded-full" style={{ background: THEME.accent1, color: '#0b0d10' }}>Luxury Novelty</span>
 
-              <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mt-4 text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-[-0.03em] leading-[0.75]">
+              <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mt-6 md:mt-8 text-8xl md:text-[12rem] lg:text-[16rem] font-black tracking-[-0.03em] leading-[0.85]">
                 Give {reduce ? (
                   <span className="bg-clip-text text-transparent drop-shadow-[0_10px_40px_rgba(90,200,228,0.25)]" style={{ backgroundImage: `linear-gradient(90deg, ${THEME.accent1}, ${THEME.accent2}, ${THEME.accent3})` }}>Nothing</span>
                 ) : (
