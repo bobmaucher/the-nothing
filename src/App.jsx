@@ -20,7 +20,7 @@ function ErrorView(){
   return (
     <section className="max-w-7xl mx-auto px-4 py-24 text-center text-slate-100">
       <h1 className="text-3xl font-bold">500 — Nothing went wrong*</h1>
-      <p className="mt-2 text-slate-300">*Something did, but we’ll show you nothing.</p>
+      <p className="mt-2 text-slate-300">*Something did, but it's probably nothing.</p>
       <a href="/" className="mt-6 inline-block underline">Return to Home</a>
     </section>
   );
