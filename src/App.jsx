@@ -270,11 +270,11 @@ function Home(){
                 <a href={ONE}
                   className="inline-block rounded-2xl px-5 py-3 font-semibold text-black transition hover:scale-[1.02]"
                   style={{ background: "linear-gradient(90deg, #5AC8E4, #ED1C24)" }}>
-                  Single Serving of NØTHING — $3
+                  Single Serving of NØTHING
                 </a>
                 <a href={SUB}
                   className="inline-block rounded-2xl px-5 py-3 text-slate-100 border border-white/10 bg-white/5 transition hover:ring-1 hover:ring-white/20 hover:scale-[1.02]">
-                  Join The NØTHING Club — $3/mo
+                  Join The NØTHING Club
                 </a>
                 {/*<NeonButton onClick={payOnce} className="group px-7 py-4 text-base"><span className="inline-flex items-center gap-2"><CreditCard className="w-4 h-4 transition-transform group-hover:translate-x-1"/> Buy Nothing (one‑time)</span></NeonButton>*/}
                 {/*<NeonButton variant="ghost" onClick={subscribe} className="px-7 py-4 text-base">Subscribe to Nothing (monthly)</NeonButton>*/}
