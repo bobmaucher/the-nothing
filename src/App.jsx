@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from "reac
 import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
 import { CreditCard, ShieldCheck, Infinity, Gift, Sparkles, Star, ArrowRight } from "lucide-react";
 import { jsPDF } from "jspdf";
+import heroImg from "./assets/nothing-hero.png";
 
 
 function Boom(){ throw new Error("kaboom"); }
@@ -271,7 +272,7 @@ function Home(){
 
             <div className="md:justify-self-end">
               <img
-                src="/nothing-hero.png"
+                src={heroImg}
                 alt="THE NØTHING — premium nothing"
                 loading="eager"
                 decoding="async"
